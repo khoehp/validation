@@ -1,15 +1,19 @@
-import React from 'react'
-import { Table, Card, Button } from "antd"
+import React, { useState } from 'react'
+import { Table, Card, Button, Input } from "antd"
+
+const { Search } = Input;
+
 function StudentList(props) {
-
-
+  const studentList = props.studentList;
+  const [isSearch, setIsSearch] = useState(false);
+  const [search, setSearch] = useState([]);
   const colums = [
     {
       title: "Mã SV",
-      dataIndex: "id",
-      key: "id",
+      dataIndex: "mssv",
+      key: "mssv",
       render: (_, user) => {
-        return <h3>{user.id}</h3>
+        return <h3>{user.mssv}</h3>
       },
     },
     {
@@ -42,16 +46,39 @@ function StudentList(props) {
       render: (_, user) => {
         return (
           <>
-            <Button onClick={()=>props.getUpdateUser(user)} type="primary">Chỉnh sửa</Button>
-            <Button onClick={()=> props.deleteUser(user.id)} type='danger'>Xóa</Button>
+            <Button onClick={() => props.getUpdateUser(user)} type="primary">Chỉnh sửa</Button>
+            <Button onClick={() => props.deleteUser(user.id)} type='danger'>Xóa</Button>
           </>
         )
       }
     },
   ]
+
+  const handleFilterChange = (e) => {
+    const list = [...studentList];
+    const value = e.target.value;
+    if (value === "") {
+      setIsSearch(false)
+      return
+    } else {
+      setIsSearch(true)
+    }
+    const search = list.filter((item) => {
+      item.name.toLowrCase().includes(value)
+      setSearch(search)
+    })
+  }
+
   return (
     <Card title="Danh sách sinh viên" headStyle={{ backgroundColor: "#000000", color: "#fff" }}>
-      <Table dataSource={props.studentList.map((user) => {
+
+      <Search
+        onChange={handleFilterChange}
+        laceholder='tìm kiếm'
+        allowClear
+        enterButton="Search"
+        size="large" />
+      <Table dataSource={isSearch ? search : studentList.map((user) => {
         return { ...user, key: user.id }
       })} columns={colums}>
 
