@@ -1,0 +1,13 @@
+.form{
+    display: flex;
+    flex-wrap: wrap;
+}
+.formGroup{
+    width: 50%;
+    padding: 10px 20px;
+    box-sizing: border-box;
+}
+.btn{
+    text-align: center;
+    width: 100%;
+}
